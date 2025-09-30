@@ -2,21 +2,32 @@
 <html>
   <head>
     <meta name="darkreader-lock">
-    <script>
-  async function patchSplashText() {
+<script>
+  (async function patchSplashText() {
     try {
       const res = await fetch("config.json");
       const cfg = await res.json();
+
+      let chosenSplash = 'Welcome!';
       if (Array.isArray(cfg.splashTexts) && cfg.splashTexts.length > 0) {
         const randomIndex = Math.floor(Math.random() * cfg.splashTexts.length);
-        cfg.splashText = cfg.splashTexts[randomIndex];
+        chosenSplash = cfg.splashTexts[randomIndex];
       }
-      window.appConfig = cfg; // so the client code sees the updated splashText
+
+      // Store in localStorage for Minecraft Web Client to use
+      localStorage.setItem('minecraft_splash_text_cache', chosenSplash);
+
+      // Remove remote URL key to avoid conflicts
+      localStorage.removeItem('minecraft_splash_url');
+
+      // Optional: keep window reference for debugging
+      window.__JMAX_SPLASH = chosenSplash;
+      console.log('[JMAX] Splash pre-seeded:', chosenSplash);
+
     } catch (err) {
-      console.error("Error loading config.json", err);
+      console.error("Error loading config.json for splash text:", err);
     }
-  }
-  patchSplashText();
+  })();
 </script>
     <script>
       window.startLoad = Date.now()
