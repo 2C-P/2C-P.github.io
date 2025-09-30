@@ -7,15 +7,9 @@
   "peerJsServer": "",
   "peerJsServerFallback": "https://p2p.mcraft.fun",
   "promoteServers": [
-    {
-      "ip": "wss://play.mcraft.fun"
-    },
-    {
-      "ip": "wss://ws.fuchsmc.net"
-    },
-    {
-      "ip": "wss://play2.mcraft.fun"
-    },
+    { "ip": "wss://play.mcraft.fun" },
+    { "ip": "wss://ws.fuchsmc.net" },
+    { "ip": "wss://play2.mcraft.fun" },
     {
       "ip": "wss://play-creative.mcraft.fun",
       "description": "Might be available soon, stay tuned!"
@@ -26,61 +20,34 @@
       "description": "Very nice a polite server. Must try for everyone!"
     }
   ],
+
   "rightSideText": "A Minecraft client clone in the browser!",
-  "splashText": [
+
+  "splashTexts": [
     "The sunset is coming!",
-    "Powered by PrismarineJS!",
-    "Creepers gonna creep.",
-    "Now with 100% more blocks!",
-    "Building… one chunk at a time.",
-    "Redstone powered fun!",
-    "Dig straight down… or not!",
-    "Punching trees since 2009.",
-    "Craft. Mine. Repeat."
+    "Creepers gonna creep!",
+    "Punching trees since 2009!",
+    "Now with extra bugs!",
+    "100% JavaScript powered!"
   ],
+
   "splashTextFallback": "Welcome!",
+
   "pauseLinks": [
     [
-      {
-        "type": "github"
-      },
-      {
-        "type": "discord"
-      }
+      { "type": "github" },
+      { "type": "discord" }
     ]
   ],
+
   "defaultUsername": "mcrafter{0-9999}",
+
   "mobileButtons": [
-    {
-      "action": "general.drop",
-      "actionHold": "general.dropStack",
-      "label": "Q"
-    },
-    {
-      "action": "general.selectItem",
-      "actionHold": "",
-      "label": "S"
-    },
-    {
-      "action": "general.debugOverlay",
-      "actionHold": "general.debugOverlayHelpMenu",
-      "label": "F3"
-    },
-    {
-      "action": "general.playersList",
-      "actionHold": "",
-      "icon": "pixelarticons:users",
-      "label": "TAB"
-    },
-    {
-      "action": "general.chat",
-      "actionHold": "",
-      "label": ""
-    },
-    {
-      "action": "ui.pauseMenu",
-      "actionHold": "",
-      "label": ""
-    }
+    { "action": "general.drop", "actionHold": "general.dropStack", "label": "Q" },
+    { "action": "general.selectItem", "actionHold": "", "label": "S" },
+    { "action": "general.debugOverlay", "actionHold": "general.debugOverlayHelpMenu", "label": "F3" },
+    { "action": "general.playersList", "actionHold": "", "icon": "pixelarticons:users", "label": "TAB" },
+    { "action": "general.chat", "actionHold": "", "label": "" },
+    { "action": "ui.pauseMenu", "actionHold": "", "label": "" }
   ]
 }
