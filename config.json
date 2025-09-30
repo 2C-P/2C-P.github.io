@@ -27,7 +27,17 @@
     }
   ],
   "rightSideText": "A Minecraft client clone in the browser!",
-  "splashText": "The sunset is coming!",
+  "splashText": [
+    "The sunset is coming!",
+    "Powered by PrismarineJS!",
+    "Creepers gonna creep.",
+    "Now with 100% more blocks!",
+    "Building… one chunk at a time.",
+    "Redstone powered fun!",
+    "Dig straight down… or not!",
+    "Punching trees since 2009.",
+    "Craft. Mine. Repeat."
+  ],
   "splashTextFallback": "Welcome!",
   "pauseLinks": [
     [
