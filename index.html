@@ -3,6 +3,22 @@
   <head>
     <meta name="darkreader-lock">
     <script>
+  async function patchSplashText() {
+    try {
+      const res = await fetch("config.json");
+      const cfg = await res.json();
+      if (Array.isArray(cfg.splashTexts) && cfg.splashTexts.length > 0) {
+        const randomIndex = Math.floor(Math.random() * cfg.splashTexts.length);
+        cfg.splashText = cfg.splashTexts[randomIndex];
+      }
+      window.appConfig = cfg; // so the client code sees the updated splashText
+    } catch (err) {
+      console.error("Error loading config.json", err);
+    }
+  }
+  patchSplashText();
+</script>
+    <script>
       window.startLoad = Date.now()
       // g663 fix: forbid change of string prototype
       Object.defineProperty(String.prototype, 'format', {
@@ -158,32 +174,6 @@
     <link rel="favicon" href="favicon.png">
     <link rel="icon" type="image/png" href="favicon.png">
     <meta property="og:image" content="favicon.png">
-
-    <!-- === SPLASH PRE-SEED SCRIPT === -->
-    <script>
-      (function() {
-        try {
-          const SPLASHES = [
-            "Made by Jmax",
-            "Powered by Prismarine",
-            "Bro, the tech team sucks",
-            "Gonna get a strike with this one",
-            "Jsq4d forever RIP Bubble"
-          ];
-          const valid = SPLASHES.filter(s => typeof s === 'string' && s.trim().length > 0);
-          const chosen = valid.length ? valid[Math.floor(Math.random() * valid.length)] : 'Welcome!';
-          const CACHE_KEY = 'minecraft_splash_text_cache';
-          const URL_KEY = 'minecraft_splash_url';
-          localStorage.setItem(CACHE_KEY, chosen);
-          localStorage.removeItem(URL_KEY);
-          window.__JMAX_SPLASH = chosen;
-          console.log('[JMAX] Splash pre-seeded:', chosen);
-        } catch (err) {
-          console.warn('[JMAX] Could not pre-seed splash text:', err);
-        }
-      })();
-    </script>
-    <!-- === END SPLASH PRE-SEED === -->
 
   </head>
   <body>
