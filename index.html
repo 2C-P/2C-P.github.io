@@ -2,32 +2,6 @@
 <html>
   <head>
     <meta name="darkreader-lock">
-<script>
-  // Random splash text patch
-  async function patchSplash() {
-    try {
-      const res = await fetch("config.json");
-      const cfg = await res.json();
-      const splashes = [
-        "Made by Jmax",
-        "Powered by Prismarine",
-        "Bro, the tech team sucks",
-        "Gonna get a strike with this one",
-        "Jsq4d forever RIP Bubble"
-      ];
-      // Pick a random splash
-      const chosen = splashes[Math.floor(Math.random() * splashes.length)];
-      // Override the config property used by the client
-      cfg.splashText = chosen;
-      cfg.splashTextFallback = chosen;
-      window.appConfig = cfg;
-      console.log("[Splash] Chosen splash:", chosen);
-    } catch (err) {
-      console.error("Error patching splash:", err);
-    }
-  }
-  patchSplash();
-</script>
     <script>
       window.startLoad = Date.now()
       // g663 fix: forbid change of string prototype
@@ -117,6 +91,7 @@
     <script type="module" async>
       const checkLoadEruda = () => {
         if (window.location.hash === '#dev') {
+          // todo precache (check offline)?
           import('https://cdn.skypack.dev/eruda').then(({ default: eruda }) => {
             eruda.init()
           })
@@ -166,8 +141,14 @@
           }
       }
     </style>
-
+    <!-- // #endregion -->
+    <!-- <script type="module">
+      window.loadPluginScript = async ({ pluginName, script }) => {
+        window.loadedPlugins[pluginName] = await import(script)
+      }
+    </script> -->
     <title>Minecraft Web Client</title>
+    <!-- <link rel="canonical" href="https://mcraft.fun"> -->
     <meta name="description" content="Minecraft Java Edition Client in Browser — Full Multiplayer Support, Server Connect, Offline Play — Join real Minecraft servers">
     <meta name="keywords" content="Play, Minecraft, Online, Web, Java, Server, Single player, Javascript, PrismarineJS, Voxel, WebGL, Three.js">
     <meta name="date" content="2024-07-11" scheme="YYYY-MM-DD">
@@ -177,22 +158,27 @@
     <meta property="og:title" content="Minecraft Web Client" />
     <meta property="og:type" content="website" />
     <meta name="format-detection" content="telephone=no">
-    <meta charset="UTF-8">
-    <link href="./static/css/22.b067bcc2.css" rel="stylesheet">
-    <link href="./static/css/index.52e799dc.css" rel="stylesheet">
-    <link rel="manifest" crossorigin="anonymous" href="manifest.json">
-    <link rel="favicon" href="favicon.png">
-    <link rel="icon" type="image/png" href="favicon.png">
-    <meta property="og:image" content="favicon.png">
-
+    <script>
+  (function() {
+    const splashes = [
+      "Made by Jmax",
+      "Powered by Prismarine",
+      "Bro, the tech team sucks",
+      "Gonna get a strike with this one",
+      "Jsq4d forever RIP Bubble"
+    ];
+    const chosen = splashes[Math.floor(Math.random() * splashes.length)];
+    // override the default splash for Minecraft Web Client
+    if (!window.appConfig) window.appConfig = {};
+    window.appConfig.splashText = chosen;
+    window.appConfig.splashTextFallback = chosen;
+    console.log("[Splash] Chosen splash:", chosen);
+  })();
+</script>
   </head>
   <body>
     <div id="react-root"></div>
     <div id="ui-root"></div>
     <!-- inject script -->
-    <script defer src="./static/js/lib-polyfill.0b967fd8.js"></script>
-    <script defer src="./static/js/lib-react.2ae75c39.js"></script>
-    <script defer src="./static/js/22.7edb4911.js"></script>
-    <script defer src="./static/js/index.e3a4e599.js"></script>
   </body>
 </html>
