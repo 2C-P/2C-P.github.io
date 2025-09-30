@@ -3,31 +3,30 @@
   <head>
     <meta name="darkreader-lock">
 <script>
-  (async function patchSplashText() {
+  // Random splash text patch
+  async function patchSplash() {
     try {
       const res = await fetch("config.json");
       const cfg = await res.json();
-
-      let chosenSplash = 'Welcome!';
-      if (Array.isArray(cfg.splashTexts) && cfg.splashTexts.length > 0) {
-        const randomIndex = Math.floor(Math.random() * cfg.splashTexts.length);
-        chosenSplash = cfg.splashTexts[randomIndex];
-      }
-
-      // Store in localStorage for Minecraft Web Client to use
-      localStorage.setItem('minecraft_splash_text_cache', chosenSplash);
-
-      // Remove remote URL key to avoid conflicts
-      localStorage.removeItem('minecraft_splash_url');
-
-      // Optional: keep window reference for debugging
-      window.__JMAX_SPLASH = chosenSplash;
-      console.log('[JMAX] Splash pre-seeded:', chosenSplash);
-
+      const splashes = [
+        "Made by Jmax",
+        "Powered by Prismarine",
+        "Bro, the tech team sucks",
+        "Gonna get a strike with this one",
+        "Jsq4d forever RIP Bubble"
+      ];
+      // Pick a random splash
+      const chosen = splashes[Math.floor(Math.random() * splashes.length)];
+      // Override the config property used by the client
+      cfg.splashText = chosen;
+      cfg.splashTextFallback = chosen;
+      window.appConfig = cfg;
+      console.log("[Splash] Chosen splash:", chosen);
     } catch (err) {
-      console.error("Error loading config.json for splash text:", err);
+      console.error("Error patching splash:", err);
     }
-  })();
+  }
+  patchSplash();
 </script>
     <script>
       window.startLoad = Date.now()
