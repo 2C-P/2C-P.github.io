@@ -28,6 +28,8 @@
   ],
   "rightSideText": "A Minecraft client clone in the browser!",
   "defaultUsername": "mcrafter{0-9999}",
+  "splashText": "Welcome!",          // fallback
+  "splashTextFallback": "Welcome!",  // secondary fallback
   "splashTexts": [
     "Made by Jmax",
     "Powered by Prismarine",
@@ -37,12 +39,8 @@
   ],
   "pauseLinks": [
     [
-      {
-        "type": "github"
-      },
-      {
-        "type": "discord"
-      }
+      { "type": "github" },
+      { "type": "discord" }
     ]
   ],
   "mobileButtons": [
