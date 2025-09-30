@@ -91,7 +91,6 @@
     <script type="module" async>
       const checkLoadEruda = () => {
         if (window.location.hash === '#dev') {
-          // todo precache (check offline)?
           import('https://cdn.skypack.dev/eruda').then(({ default: eruda }) => {
             eruda.init()
           })
@@ -141,14 +140,8 @@
           }
       }
     </style>
-    <!-- // #endregion -->
-    <!-- <script type="module">
-      window.loadPluginScript = async ({ pluginName, script }) => {
-        window.loadedPlugins[pluginName] = await import(script)
-      }
-    </script> -->
+
     <title>Minecraft Web Client</title>
-    <!-- <link rel="canonical" href="https://mcraft.fun"> -->
     <meta name="description" content="Minecraft Java Edition Client in Browser — Full Multiplayer Support, Server Connect, Offline Play — Join real Minecraft servers">
     <meta name="keywords" content="Play, Minecraft, Online, Web, Java, Server, Single player, Javascript, PrismarineJS, Voxel, WebGL, Three.js">
     <meta name="date" content="2024-07-11" scheme="YYYY-MM-DD">
@@ -158,10 +151,48 @@
     <meta property="og:title" content="Minecraft Web Client" />
     <meta property="og:type" content="website" />
     <meta name="format-detection" content="telephone=no">
-  <meta charset="UTF-8"><link href="./static/css/22.b067bcc2.css" rel="stylesheet"><link href="./static/css/index.52e799dc.css" rel="stylesheet"><link rel="manifest" crossorigin="anonymous" href="manifest.json"><link rel="favicon" href="favicon.png"><link rel="icon" type="image/png" href="favicon.png"><meta property="og:image" content="favicon.png"></head>
+    <meta charset="UTF-8">
+    <link href="./static/css/22.b067bcc2.css" rel="stylesheet">
+    <link href="./static/css/index.52e799dc.css" rel="stylesheet">
+    <link rel="manifest" crossorigin="anonymous" href="manifest.json">
+    <link rel="favicon" href="favicon.png">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <meta property="og:image" content="favicon.png">
+
+    <!-- === SPLASH PRE-SEED SCRIPT === -->
+    <script>
+      (function() {
+        try {
+          const SPLASHES = [
+            "Made by Jmax",
+            "Powered by Prismarine",
+            "Bro, the tech team sucks",
+            "Gonna get a strike with this one",
+            "Jsq4d forever RIP Bubble"
+          ];
+          const valid = SPLASHES.filter(s => typeof s === 'string' && s.trim().length > 0);
+          const chosen = valid.length ? valid[Math.floor(Math.random() * valid.length)] : 'Welcome!';
+          const CACHE_KEY = 'minecraft_splash_text_cache';
+          const URL_KEY = 'minecraft_splash_url';
+          localStorage.setItem(CACHE_KEY, chosen);
+          localStorage.removeItem(URL_KEY);
+          window.__JMAX_SPLASH = chosen;
+          console.log('[JMAX] Splash pre-seeded:', chosen);
+        } catch (err) {
+          console.warn('[JMAX] Could not pre-seed splash text:', err);
+        }
+      })();
+    </script>
+    <!-- === END SPLASH PRE-SEED === -->
+
+  </head>
   <body>
     <div id="react-root"></div>
     <div id="ui-root"></div>
     <!-- inject script -->
-  <script defer src="./static/js/lib-polyfill.0b967fd8.js"></script><script defer src="./static/js/lib-react.2ae75c39.js"></script><script defer src="./static/js/22.7edb4911.js"></script><script defer src="./static/js/index.e3a4e599.js"></script></body>
+    <script defer src="./static/js/lib-polyfill.0b967fd8.js"></script>
+    <script defer src="./static/js/lib-react.2ae75c39.js"></script>
+    <script defer src="./static/js/22.7edb4911.js"></script>
+    <script defer src="./static/js/index.e3a4e599.js"></script>
+  </body>
 </html>
