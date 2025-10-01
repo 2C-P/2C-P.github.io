@@ -39,7 +39,7 @@
       }
     ]
   ],
-  "defaultUsername": "mcrafter{0-9999}",
+  "defaultUsername": "Sigma{0-9999}",
   "mobileButtons": [
     {
       "action": "general.drop",
