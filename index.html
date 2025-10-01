@@ -3,11 +3,9 @@
   <head>
     <meta name="darkreader-lock">
 <script>
-  // Random splash text patch
-  async function patchSplash() {
-    try {
-      const res = await fetch("config.json");
-      const cfg = await res.json();
+  // Custom splash text patch (runs after page load)
+  window.addEventListener('load', () => {
+    if (window.appConfig) {
       const splashes = [
         "Made by Jmax",
         "Powered by Prismarine",
@@ -15,18 +13,17 @@
         "Gonna get a strike with this one",
         "Jsq4d forever RIP Bubble"
       ];
-      // Pick a random splash
       const chosen = splashes[Math.floor(Math.random() * splashes.length)];
-      // Override the config property used by the client
-      cfg.splashText = chosen;
-      cfg.splashTextFallback = chosen;
-      window.appConfig = cfg;
+      window.appConfig.splashText = chosen;
+      window.appConfig.splashTextFallback = chosen;
+
+      // Update the loader subtitle immediately
+      const subtitle = document.querySelector('.initial-loader .subtitle');
+      if (subtitle) subtitle.textContent = chosen;
+
       console.log("[Splash] Chosen splash:", chosen);
-    } catch (err) {
-      console.error("Error patching splash:", err);
     }
-  }
-  patchSplash();
+  });
 </script>
     <script>
       window.startLoad = Date.now()
