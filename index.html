@@ -24,7 +24,11 @@
     </div>
     <div>
         <div style="font-size: calc(var(--font-size) * 1.8);color: lightgray;" class="title">Loading...</div>
-        <div style="font-size: var(--font-size);color: rgb(176, 176, 176);margin-top: 3px;text-align: center" class="subtitle">A true Minecraft client in your browser!</div>
+<div style="font-size: var(--font-size);color: rgb(176, 176, 176);margin-top: 3px;text-align: center" class="subtitle">
+  <script>
+    document.write(window.appConfig?.splashText || "Welcome!");
+  </script>
+</div>
         <!-- small text pre -->
         <div style="font-size: calc(var(--font-size) * 0.6);color: rgb(150, 150, 150);margin-top: 3px;text-align: center;white-space: pre-line;" class="advanced-info"></div>
         <div style="font-size: calc(var(--font-size) * 0.6);color: rgb(255, 100, 100);margin-top: 10px;text-align: center;display: none;" class="ios-warning">Only iOS 15+ is supported due to performance optimizations</div>
