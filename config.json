@@ -15,7 +15,7 @@
   ],
   "rightSideText": "A Minecraft client clone in the browser!",
   "defaultUsername": "mcrafter{0-9999}",
-  "splashText": "Your custom splash here!",
+  "splashText": "This funny was made by Jmax. And the crew in Australia. RIP BUBBLE",
   "splashTextFallback": "Welcome!",
   "pauseLinks": [
     [{"type": "github"}, {"type": "discord"}]
@@ -28,4 +28,5 @@
     {"action": "general.chat", "actionHold": "", "label": ""},
     {"action": "ui.pauseMenu", "actionHold": "", "label": ""}
   ]
+
 }
