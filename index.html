@@ -13,20 +13,17 @@
   ];
   const chosen = splashes[Math.floor(Math.random() * splashes.length)];
 
-  const tryPatch = () => {
-    const appConfig = window.appConfig;
+  const waitForLoader = setInterval(() => {
     const subtitle = document.querySelector('.initial-loader .subtitle');
-
-    if (appConfig && subtitle) {
-      appConfig.splashText = chosen;
-      appConfig.splashTextFallback = chosen;
+    if (subtitle) {
       subtitle.textContent = chosen;
+      if (!window.appConfig) window.appConfig = {};
+      window.appConfig.splashText = chosen;
+      window.appConfig.splashTextFallback = chosen;
       console.log("[Splash] Chosen splash:", chosen);
-      clearInterval(interval);
+      clearInterval(waitForLoader);
     }
-  };
-
-  const interval = setInterval(tryPatch, 50); // check every 50ms
+  }, 50);
 })();
 </script>
     <script>
