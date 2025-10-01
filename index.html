@@ -3,31 +3,35 @@
   <head>
     <meta name="darkreader-lock">
 <script>
-(function patchSplash() {
-  const splashes = [
-    "Made by Jmax",
-    "Powered by Prismarine",
-    "Bro, the tech team sucks",
-    "Gonna get a strike with this one",
-    "Jsq4d forever RIP Bubble"
-  ];
-  const chosen = splashes[Math.floor(Math.random() * splashes.length)];
+  // Random splash text patch
+  async function patchSplash() {
+    try {
+      const res = await fetch("config.json");
+      const cfg = await res.json();
 
-  // Watch for loader insertion
-  const observer = new MutationObserver((mutations, obs) => {
-    const subtitle = document.querySelector('.initial-loader .subtitle');
-    if (subtitle) {
-      subtitle.textContent = chosen;
-      if (!window.appConfig) window.appConfig = {};
-      window.appConfig.splashText = chosen;
-      window.appConfig.splashTextFallback = chosen;
+      // Your list of splashes
+      const splashes = [
+        "Made by Jmax",
+        "Powered by Prismarine",
+        "Bro, the tech team sucks",
+        "Gonna get a strike with this one",
+        "Jsq4d forever RIP Bubble"
+      ];
+
+      // Pick a random one
+      const chosen = splashes[Math.floor(Math.random() * splashes.length)];
+
+      // Set it in the config
+      cfg.splashText = chosen;
+      cfg.splashTextFallback = chosen;
+      window.appConfig = cfg;
+
       console.log("[Splash] Chosen splash:", chosen);
-      obs.disconnect(); // Stop observing once patched
+    } catch (err) {
+      console.error("Error patching splash:", err);
     }
-  });
-
-  observer.observe(document.documentElement, { childList: true, subtree: true });
-})();
+  }
+  patchSplash();
 </script>
     <script>
       window.startLoad = Date.now()
