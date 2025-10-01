@@ -2,6 +2,32 @@
 <html>
   <head>
     <meta name="darkreader-lock">
+<script>
+  // Random splash text patch
+  async function patchSplash() {
+    try {
+      const res = await fetch("config.json");
+      const cfg = await res.json();
+      const splashes = [
+        "Made by Jmax",
+        "Powered by Prismarine",
+        "Bro, the tech team sucks",
+        "Gonna get a strike with this one",
+        "Jsq4d forever RIP Bubble"
+      ];
+      // Pick a random splash
+      const chosen = splashes[Math.floor(Math.random() * splashes.length)];
+      // Override the config property used by the client
+      cfg.splashText = chosen;
+      cfg.splashTextFallback = chosen;
+      window.appConfig = cfg;
+      console.log("[Splash] Chosen splash:", chosen);
+    } catch (err) {
+      console.error("Error patching splash:", err);
+    }
+  }
+  patchSplash();
+</script>
     <script>
       window.startLoad = Date.now()
       // g663 fix: forbid change of string prototype
@@ -24,11 +50,7 @@
     </div>
     <div>
         <div style="font-size: calc(var(--font-size) * 1.8);color: lightgray;" class="title">Loading...</div>
-<div style="font-size: var(--font-size);color: rgb(176, 176, 176);margin-top: 3px;text-align: center" class="subtitle">
-  <script>
-    document.write(window.appConfig?.splashText || "Welcome!");
-  </script>
-</div>
+        <div style="font-size: var(--font-size);color: rgb(176, 176, 176);margin-top: 3px;text-align: center" class="subtitle">A true Minecraft client in your browser!</div>
         <!-- small text pre -->
         <div style="font-size: calc(var(--font-size) * 0.6);color: rgb(150, 150, 150);margin-top: 3px;text-align: center;white-space: pre-line;" class="advanced-info"></div>
         <div style="font-size: calc(var(--font-size) * 0.6);color: rgb(255, 100, 100);margin-top: 10px;text-align: center;display: none;" class="ios-warning">Only iOS 15+ is supported due to performance optimizations</div>
@@ -95,7 +117,6 @@
     <script type="module" async>
       const checkLoadEruda = () => {
         if (window.location.hash === '#dev') {
-          // todo precache (check offline)?
           import('https://cdn.skypack.dev/eruda').then(({ default: eruda }) => {
             eruda.init()
           })
@@ -145,14 +166,8 @@
           }
       }
     </style>
-    <!-- // #endregion -->
-    <!-- <script type="module">
-      window.loadPluginScript = async ({ pluginName, script }) => {
-        window.loadedPlugins[pluginName] = await import(script)
-      }
-    </script> -->
+
     <title>Minecraft Web Client</title>
-    <!-- <link rel="canonical" href="https://mcraft.fun"> -->
     <meta name="description" content="Minecraft Java Edition Client in Browser — Full Multiplayer Support, Server Connect, Offline Play — Join real Minecraft servers">
     <meta name="keywords" content="Play, Minecraft, Online, Web, Java, Server, Single player, Javascript, PrismarineJS, Voxel, WebGL, Three.js">
     <meta name="date" content="2024-07-11" scheme="YYYY-MM-DD">
@@ -162,27 +177,22 @@
     <meta property="og:title" content="Minecraft Web Client" />
     <meta property="og:type" content="website" />
     <meta name="format-detection" content="telephone=no">
-    <script>
-  (function() {
-    const splashes = [
-      "Made by Jmax",
-      "Powered by Prismarine",
-      "Bro, the tech team sucks",
-      "Gonna get a strike with this one",
-      "Jsq4d forever RIP Bubble"
-    ];
-    const chosen = splashes[Math.floor(Math.random() * splashes.length)];
-    // override the default splash for Minecraft Web Client
-    if (!window.appConfig) window.appConfig = {};
-    window.appConfig.splashText = chosen;
-    window.appConfig.splashTextFallback = chosen;
-    console.log("[Splash] Chosen splash:", chosen);
-  })();
-</script>
+    <meta charset="UTF-8">
+    <link href="./static/css/22.b067bcc2.css" rel="stylesheet">
+    <link href="./static/css/index.52e799dc.css" rel="stylesheet">
+    <link rel="manifest" crossorigin="anonymous" href="manifest.json">
+    <link rel="favicon" href="favicon.png">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <meta property="og:image" content="favicon.png">
+
   </head>
   <body>
     <div id="react-root"></div>
     <div id="ui-root"></div>
     <!-- inject script -->
+    <script defer src="./static/js/lib-polyfill.0b967fd8.js"></script>
+    <script defer src="./static/js/lib-react.2ae75c39.js"></script>
+    <script defer src="./static/js/22.7edb4911.js"></script>
+    <script defer src="./static/js/index.e3a4e599.js"></script>
   </body>
 </html>
