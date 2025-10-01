@@ -169,5 +169,31 @@
     <script defer src="./static/js/lib-react.2ae75c39.js"></script>
     <script defer src="./static/js/22.7edb4911.js"></script>
     <script defer src="./static/js/index.e3a4e599.js"></script>
+    <script>
+  const customLinks = [
+    "https://discord.gg/YOUR_FIRST_INVITE",
+    "https://discord.gg/YOUR_SECOND_INVITE"
+  ];
+
+  const customGitHub = "https://github.com/YOURREPO";
+
+  const observer = new MutationObserver(() => {
+    let discordIndex = 0;
+    document.querySelectorAll('.pause-menu a').forEach(link => {
+      if (link.href.includes("discord.gg")) {
+        // Assign each Discord button one of your custom links
+        link.href = customLinks[discordIndex % customLinks.length];
+        link.textContent = "Join Discord " + (discordIndex + 1);
+        discordIndex++;
+      }
+      if (link.href.includes("github.com")) {
+        link.href = customGitHub;
+        link.textContent = "Visit Our GitHub";
+      }
+    });
+  });
+
+  observer.observe(document.body, { childList: true, subtree: true });
+</script>
   </body>
 </html>
