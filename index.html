@@ -13,7 +13,8 @@
   ];
   const chosen = splashes[Math.floor(Math.random() * splashes.length)];
 
-  const waitForLoader = setInterval(() => {
+  // Watch for loader insertion
+  const observer = new MutationObserver((mutations, obs) => {
     const subtitle = document.querySelector('.initial-loader .subtitle');
     if (subtitle) {
       subtitle.textContent = chosen;
@@ -21,9 +22,11 @@
       window.appConfig.splashText = chosen;
       window.appConfig.splashTextFallback = chosen;
       console.log("[Splash] Chosen splash:", chosen);
-      clearInterval(waitForLoader);
+      obs.disconnect(); // Stop observing once patched
     }
-  }, 50);
+  });
+
+  observer.observe(document.documentElement, { childList: true, subtree: true });
 })();
 </script>
     <script>
