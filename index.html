@@ -9,7 +9,6 @@
       const res = await fetch("config.json");
       const cfg = await res.json();
 
-      // Your list of splashes
       const splashes = [
         "Made by Jmax",
         "Powered by Prismarine",
@@ -18,13 +17,15 @@
         "Jsq4d forever RIP Bubble"
       ];
 
-      // Pick a random one
       const chosen = splashes[Math.floor(Math.random() * splashes.length)];
 
-      // Set it in the config
       cfg.splashText = chosen;
       cfg.splashTextFallback = chosen;
       window.appConfig = cfg;
+
+      // Update the loading screen immediately
+      const subtitleElem = document.querySelector('.initial-loader .subtitle');
+      if (subtitleElem) subtitleElem.textContent = chosen;
 
       console.log("[Splash] Chosen splash:", chosen);
     } catch (err) {
