@@ -3,27 +3,31 @@
   <head>
     <meta name="darkreader-lock">
 <script>
-  // Custom splash text patch (runs after page load)
-  window.addEventListener('load', () => {
-    if (window.appConfig) {
-      const splashes = [
-        "Made by Jmax",
-        "Powered by Prismarine",
-        "Bro, the tech team sucks",
-        "Gonna get a strike with this one",
-        "Jsq4d forever RIP Bubble"
-      ];
-      const chosen = splashes[Math.floor(Math.random() * splashes.length)];
-      window.appConfig.splashText = chosen;
-      window.appConfig.splashTextFallback = chosen;
+(function patchSplash() {
+  const splashes = [
+    "Made by Jmax",
+    "Powered by Prismarine",
+    "Bro, the tech team sucks",
+    "Gonna get a strike with this one",
+    "Jsq4d forever RIP Bubble"
+  ];
+  const chosen = splashes[Math.floor(Math.random() * splashes.length)];
 
-      // Update the loader subtitle immediately
-      const subtitle = document.querySelector('.initial-loader .subtitle');
-      if (subtitle) subtitle.textContent = chosen;
+  const tryPatch = () => {
+    const appConfig = window.appConfig;
+    const subtitle = document.querySelector('.initial-loader .subtitle');
 
+    if (appConfig && subtitle) {
+      appConfig.splashText = chosen;
+      appConfig.splashTextFallback = chosen;
+      subtitle.textContent = chosen;
       console.log("[Splash] Chosen splash:", chosen);
+      clearInterval(interval);
     }
-  });
+  };
+
+  const interval = setInterval(tryPatch, 50); // check every 50ms
+})();
 </script>
     <script>
       window.startLoad = Date.now()
