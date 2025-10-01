@@ -3,8 +3,28 @@
   <head>
     <meta name="darkreader-lock">
 <script>
-  // Random splash text patch
-  async function patchSplash() {
+  window.startLoad = Date.now();
+  // g663 fix: forbid change of string prototype
+  Object.defineProperty(String.prototype, 'format', { writable: false, configurable: false });
+  Object.defineProperty(String.prototype, 'replaceAll', { writable: false, configurable: false });
+</script>
+
+<!-- Loader -->
+<script async>
+  const loadingDiv = `...`; // your HTML loader
+  const insertLoadingDiv = () => {
+    const loadingDivElem = document.createElement('div');
+    loadingDivElem.innerHTML = loadingDiv;
+    if (!window.pageLoaded) {
+      document.documentElement.appendChild(loadingDivElem);
+    }
+  }
+  insertLoadingDiv();
+</script>
+
+<!-- Splash patch -->
+<script>
+  (async function patchSplash() {
     try {
       const res = await fetch("config.json");
       const cfg = await res.json();
@@ -23,7 +43,6 @@
       cfg.splashTextFallback = chosen;
       window.appConfig = cfg;
 
-      // Update the loading screen immediately
       const subtitleElem = document.querySelector('.initial-loader .subtitle');
       if (subtitleElem) subtitleElem.textContent = chosen;
 
@@ -31,95 +50,45 @@
     } catch (err) {
       console.error("Error patching splash:", err);
     }
-  }
-  patchSplash();
+  })();
 </script>
-    <script>
-      window.startLoad = Date.now()
-      // g663 fix: forbid change of string prototype
-      Object.defineProperty(String.prototype, 'format', {
-        writable: false,
-        configurable: false
-      });
-      Object.defineProperty(String.prototype, 'replaceAll', {
-        writable: false,
-        configurable: false
-      });
-    </script>
-    <!-- // #region initial loader -->
-    <script async>
-      const loadingDiv = /* html */ `
-      <div class="initial-loader" style="position: fixed;transition:opacity 0.2s;inset: 0;background:black;display: flex;justify-content: center;align-items: center;font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', Arial, Helvetica, sans-serif;gap: 15px;" ontransitionend="this.remove()">
-    <div>
-        <img src="./loading-bg.jpg" alt="Prismarine Web Client" style="position:fixed;inset:0;width:100%;height:100%;z-index: -2;object-fit: cover;filter: blur(3px);">
-        <div style="position: fixed;inset: 0;z-index: -1;background-color: rgba(0, 0, 0, 0.8);"></div>
-    </div>
-    <div>
-        <div style="font-size: calc(var(--font-size) * 1.8);color: lightgray;" class="title">Loading...</div>
-        <div style="font-size: var(--font-size);color: rgb(176, 176, 176);margin-top: 3px;text-align: center" class="subtitle">A true Minecraft client in your browser!</div>
-        <!-- small text pre -->
-        <div style="font-size: calc(var(--font-size) * 0.6);color: rgb(150, 150, 150);margin-top: 3px;text-align: center;white-space: pre-line;" class="advanced-info"></div>
-        <div style="font-size: calc(var(--font-size) * 0.6);color: rgb(255, 100, 100);margin-top: 10px;text-align: center;display: none;" class="ios-warning">Only iOS 15+ is supported due to performance optimizations</div>
-    </div>
-</div>
-`
-      const insertLoadingDiv = () => {
-          const loadingDivElem = document.createElement('div')
-          loadingDivElem.innerHTML = loadingDiv
-          if (!window.pageLoaded) {
-            document.documentElement.appendChild(loadingDivElem)
-          }
 
-          // iOS version detection
-          const getIOSVersion = () => {
-            const match = navigator.userAgent.match(/OS (\d+)_(\d+)_?(\d+)?/);
-            return match ? parseInt(match[1], 10) : null;
-          }
+<!-- iOS detection & error handling -->
+<script>
+  const getIOSVersion = () => {
+    const match = navigator.userAgent.match(/OS (\d+)_(\d+)_?(\d+)?/);
+    return match ? parseInt(match[1], 10) : null;
+  }
 
-          // load error handling
-          const onError = (errorOrMessage, log = false) => {
-            let message = errorOrMessage instanceof Error ? (errorOrMessage.stack ?? errorOrMessage.message) : errorOrMessage
-            if (log) console.log(message)
-            if (typeof message !== 'string') message = String(message)
-            if (document.querySelector('.initial-loader') && document.querySelector('.initial-loader').querySelector('.title').textContent !== 'Error') {
-              document.querySelector('.initial-loader').querySelector('.title').textContent = 'Error'
-              const [errorMessage, ...errorStack] = message.split('\n')
-              document.querySelector('.initial-loader').querySelector('.subtitle').textContent = errorMessage
-              document.querySelector('.initial-loader').querySelector('.advanced-info').textContent = errorStack.join('\n')
+  const onError = (errorOrMessage, log = false) => {
+    let message = errorOrMessage instanceof Error ? (errorOrMessage.stack ?? errorOrMessage.message) : errorOrMessage;
+    if (log) console.log(message);
+    if (typeof message !== 'string') message = String(message);
 
-              // Show iOS warning if applicable
-              const iosVersion = getIOSVersion();
-              if (iosVersion !== null && iosVersion < 15) {
-                document.querySelector('.initial-loader').querySelector('.ios-warning').style.display = 'block';
-              }
+    const loader = document.querySelector('.initial-loader');
+    if (loader && loader.querySelector('.title').textContent !== 'Error') {
+      loader.querySelector('.title').textContent = 'Error';
+      const [errorMessage, ...errorStack] = message.split('\n');
+      loader.querySelector('.subtitle').textContent = errorMessage;
+      loader.querySelector('.advanced-info').textContent = errorStack.join('\n');
 
-              if (window.navigator.maxTouchPoints > 1) window.location.hash = '#dev' // show eruda
-              // unregister all sw
-              if (window.navigator.serviceWorker && document.querySelector('.initial-loader').style.opacity !== 0) {
-                console.log('got worker')
-                window.navigator.serviceWorker.getRegistrations().then(registrations => {
-                  registrations.forEach(registration => {
-                    console.log('got registration')
-                    registration.unregister().then(() => {
-                      console.log('worker unregistered')
-                    })
-                  })
-                })
-              }
-              window.lastError = errorOrMessage instanceof Error ? errorOrMessage : new Error(errorOrMessage)
-            }
-          }
-          window.addEventListener('unhandledrejection', (e) => onError(e.reason, true))
-          window.addEventListener('error', (e) => onError(e.error ?? e.message))
-        }
-        insertLoadingDiv()
-        document.addEventListener('DOMContentLoaded', () => {
-          // move loading div to the end of body
-          const loadingDivElem = document.querySelector('.initial-loader');
-          const newContainer = document.body; // replace with your new container
-          if (loadingDivElem) newContainer.appendChild(loadingDivElem);
-        })
-    </script>
+      const iosVersion = getIOSVersion();
+      if (iosVersion !== null && iosVersion < 15) {
+        loader.querySelector('.ios-warning').style.display = 'block';
+      }
+
+      if (window.navigator.maxTouchPoints > 1) window.location.hash = '#dev';
+      if (window.navigator.serviceWorker && loader.style.opacity !== 0) {
+        window.navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(r => r.unregister()));
+      }
+
+      window.lastError = errorOrMessage instanceof Error ? errorOrMessage : new Error(errorOrMessage);
+    }
+  }
+
+  window.addEventListener('unhandledrejection', e => onError(e.reason, true));
+  window.addEventListener('error', e => onError(e.error ?? e.message));
+</script>
     <script type="module" async>
       const checkLoadEruda = () => {
         if (window.location.hash === '#dev') {
