@@ -1,55 +1,199 @@
 <!DOCTYPE html>
-<html style="width:100%;height:100%;background-color:black;">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
-		<meta name="description" content="EaglercraftX 1.8 test directory HTML page" />
-		<meta name="keywords" content="eaglercraft, eaglercraftx, minecraft, 1.8, 1.8.8" />
-		<title>EaglercraftX 1.8</title>
-		<meta property="og:locale" content="en-US" />
-		<meta property="og:type" content="website" />
-		<meta property="og:title" content="EaglercraftX 1.8" />
-		<meta property="og:description" content="test directory HTML page" />
-		<link type="image/png" rel="shortcut icon" href="favicon.png" />
-		<script type="text/javascript" src="classes.js"></script>
-		<script src="/js/ga4.js"></script>
-		<script type="text/javascript">
-			"use strict";
-			window.addEventListener("load", function() {
-				if(window.location.href.indexOf("file:") === 0) {
-					alert("HTTP please, do not open this file locally, run a local HTTP server and load it via HTTP");
-				}else {
-					var relayId = Math.floor(Math.random() * 3);
-					window.eaglercraftXOpts = {
-						demoMode: false,
-						container: "game_frame",
-						assetsURI: "assets.epk",
-						localesURI: "lang/",
-						worldsDB: "worlds",
-						logInvalidCerts: true,
-						crashOnUncaughtExceptions: true,
-						servers: [
-							{ addr: "ws://localhost:8081/", name: "Local test server" }
-						],
-						relays: [
-							{ addr: "wss://relay.deev.is/", comment: "lax1dude relay #1", primary: relayId === 0 },
-							{ addr: "wss://relay.lax1dude.net/", comment: "lax1dude relay #2", primary: relayId === 1 },
-							{ addr: "wss://relay.shhnowisnottheti.me/", comment: "ayunami relay #1", primary: relayId === 2 }
-						]
-					};
+<html>
+  <head>
+    <meta name="darkreader-lock">
+<script>
+  window.startLoad = Date.now();
+  // g663 fix: forbid change of string prototype
+  Object.defineProperty(String.prototype, 'format', { writable: false, configurable: false });
+  Object.defineProperty(String.prototype, 'replaceAll', { writable: false, configurable: false });
+</script>
 
-					var q = window.location.search;
-					if((typeof q === "string") && q[0] === "?" && (typeof window.URLSearchParams !== "undefined")) {
-						q = new window.URLSearchParams(q);
-						var s = q.get("server");
-						if(s) window.eaglercraftXOpts.joinServer = s;
-					}
+<!-- Loader -->
+<script async>
+  const loadingDiv = `...`; // your HTML loader
+  const insertLoadingDiv = () => {
+    const loadingDivElem = document.createElement('div');
+    loadingDivElem.innerHTML = loadingDiv;
+    if (!window.pageLoaded) {
+      document.documentElement.appendChild(loadingDivElem);
+    }
+  }
+  insertLoadingDiv();
+</script>
 
-					main();
-				}
-			});
-		</script>
-	</head>
-	<body style="margin:0px;width:100%;height:100%;overflow:hidden;background-color:black;" id="game_frame">
-	</body>
+<!-- Splash patch -->
+<script>
+  (async function patchSplash() {
+    try {
+      const res = await fetch("config.json");
+      const cfg = await res.json();
+
+      const splashes = [
+        "Made by Jmax",
+        "Powered by Prismarine",
+        "Bro, the tech team sucks",
+        "Gonna get a strike with this one",
+        "Jsq4d forever RIP Bubble"
+      ];
+
+      const chosen = splashes[Math.floor(Math.random() * splashes.length)];
+
+      cfg.splashText = chosen;
+      cfg.splashTextFallback = chosen;
+      window.appConfig = cfg;
+
+      const subtitleElem = document.querySelector('.initial-loader .subtitle');
+      if (subtitleElem) subtitleElem.textContent = chosen;
+
+      console.log("[Splash] Chosen splash:", chosen);
+    } catch (err) {
+      console.error("Error patching splash:", err);
+    }
+  })();
+</script>
+
+<!-- iOS detection & error handling -->
+<script>
+  const getIOSVersion = () => {
+    const match = navigator.userAgent.match(/OS (\d+)_(\d+)_?(\d+)?/);
+    return match ? parseInt(match[1], 10) : null;
+  }
+
+  const onError = (errorOrMessage, log = false) => {
+    let message = errorOrMessage instanceof Error ? (errorOrMessage.stack ?? errorOrMessage.message) : errorOrMessage;
+    if (log) console.log(message);
+    if (typeof message !== 'string') message = String(message);
+
+    const loader = document.querySelector('.initial-loader');
+    if (loader && loader.querySelector('.title').textContent !== 'Error') {
+      loader.querySelector('.title').textContent = 'Error';
+      const [errorMessage, ...errorStack] = message.split('\n');
+      loader.querySelector('.subtitle').textContent = errorMessage;
+      loader.querySelector('.advanced-info').textContent = errorStack.join('\n');
+
+      const iosVersion = getIOSVersion();
+      if (iosVersion !== null && iosVersion < 15) {
+        loader.querySelector('.ios-warning').style.display = 'block';
+      }
+
+      if (window.navigator.maxTouchPoints > 1) window.location.hash = '#dev';
+      if (window.navigator.serviceWorker && loader.style.opacity !== 0) {
+        window.navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(r => r.unregister()));
+      }
+
+      window.lastError = errorOrMessage instanceof Error ? errorOrMessage : new Error(errorOrMessage);
+    }
+  }
+
+  window.addEventListener('unhandledrejection', e => onError(e.reason, true));
+  window.addEventListener('error', e => onError(e.error ?? e.message));
+</script>
+    <script type="module" async>
+      const checkLoadEruda = () => {
+        if (window.location.hash === '#dev') {
+          import('https://cdn.skypack.dev/eruda').then(({ default: eruda }) => {
+            eruda.init()
+          })
+          Promise.all([import('https://cdn.skypack.dev/stacktrace-gps'), import('https://cdn.skypack.dev/error-stack-parser')]).then(async ([{ default: StackTraceGPS }, { default: ErrorStackParser }]) => {
+            if (!window.lastError) return
+
+            let stackFrames = [];
+            if (window.lastError instanceof Error) {
+              stackFrames = ErrorStackParser.parse(window.lastError);
+            }
+            console.log('stackFrames', stackFrames)
+            const gps = new StackTraceGPS()
+            const mappedFrames = await Promise.all(
+              stackFrames.map(frame => gps.pinpoint(frame))
+            );
+            console.log('mappedFrames', mappedFrames)
+
+            const stackTrace = mappedFrames
+              .map(frame => `at ${frame.functionName} (${frame.fileName}:${frame.lineNumber}:${frame.columnNumber})`)
+              .join('\n');
+            console.log('stackTrace', stackTrace)
+          })
+        }
+      }
+      checkLoadEruda()
+      window.addEventListener('hashchange', (e) => {
+        setTimeout(() => {
+          checkLoadEruda()
+        })
+      })
+    </script>
+    <style>
+      html {
+        background: black;
+      }
+      .initial-loader {
+          --font-size: 20px;
+      }
+      @media screen and (min-width: 550px) {
+          .initial-loader {
+              --font-size: 30px;
+          }
+      }
+      @media screen and (min-width: 950px) {
+          .initial-loader {
+              --font-size: 50px;
+          }
+      }
+    </style>
+
+    <title>Untitled Document</title>
+    <meta name="description" content="Minecraft Java Client in Browser — Full Multiplayer Support, Server Connect, Offline Play — Join real Minecraft servers">
+    <meta name="keywords" content="Play, Minecraft, Online, Web, Java, Server, Single player, Javascript, PrismarineJS, Voxel, WebGL, Three.js">
+    <meta name="date" content="2024-07-11" scheme="YYYY-MM-DD">
+    <meta name="language" content="English">
+    <meta name="theme-color" content="#349474">
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover'>
+    <meta property="og:title" content="Minecraft Web Client" />
+    <meta property="og:type" content="website" />
+    <meta name="format-detection" content="telephone=no">
+    <meta charset="UTF-8">
+    <link href="./static/css/22.b067bcc2.css" rel="stylesheet">
+    <link href="./static/css/index.52e799dc.css" rel="stylesheet">
+    <link rel="manifest" crossorigin="anonymous" href="manifest.json">
+    <link rel="favicon" href="favicon.png">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <meta property="og:image" content="favicon.png">
+
+  </head>
+  <body>
+    <div id="react-root"></div>
+    <div id="ui-root"></div>
+    <!-- inject script -->
+    <script defer src="./static/js/lib-polyfill.0b967fd8.js"></script>
+    <script defer src="./static/js/lib-react.2ae75c39.js"></script>
+    <script defer src="./static/js/22.7edb4911.js"></script>
+    <script defer src="./static/js/index.e3a4e599.js"></script>
+    <script>
+  const customLinks = [
+    "https://discord.gg/YOUR_FIRST_INVITE",
+    "https://discord.gg/YOUR_SECOND_INVITE"
+  ];
+
+  const customGitHub = "https://github.com/YOURREPO";
+
+  const observer = new MutationObserver(() => {
+    let discordIndex = 0;
+    document.querySelectorAll('.pause-menu a').forEach(link => {
+      if (link.href.includes("discord.gg")) {
+        // Assign each Discord button one of your custom links
+        link.href = customLinks[discordIndex % customLinks.length];
+        link.textContent = "Join Discord " + (discordIndex + 1);
+        discordIndex++;
+      }
+      if (link.href.includes("github.com")) {
+        link.href = customGitHub;
+        link.textContent = "Visit Our GitHub";
+      }
+    });
+  });
+
+  observer.observe(document.body, { childList: true, subtree: true });
+</script>
+  </body>
 </html>
