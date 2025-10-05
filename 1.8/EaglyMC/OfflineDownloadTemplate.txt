@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+
+
+
+<!--
+
+This file is from ${date}, there is no official eagler download link anymore, check the websites and discords of your favorite eagler servers for new versions
+
+Be aware that some server owners are lazy and do not update their client regularly
+
+Compile it yourself here: https://gitlab.com/lax1dude/eaglercraftx-1.8/
+
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html style="width:100%;height:100%;background-color:black;">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+<meta name="description" content="EaglercraftX 1.8 Offline" />
+<meta name="keywords" content="eaglercraft, eaglercraftx, minecraft, 1.8, 1.8.8" />
+<title>EaglyMC 1.20</title>
+<meta property="og:locale" content="en-US" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="EaglercraftX 1.8 Offline" />
+<meta property="og:description" content="this file is not a website, whoever uploaded it to this URL is a dumbass" />
+<script type="text/javascript">
+"use strict";
+var relayId = Math.floor(Math.random() * 3);
+
+// %%%%%%%%% launch options %%%%%%%%%%%%
+
+window.eaglercraftXOpts = {
+	container: "game_frame",
+	worldsDB: "worlds",
+	relays: [
+		{ addr: "wss://relay.deev.is/", comment: "lax1dude relay #1", primary: relayId == 0 },
+		{ addr: "wss://relay.lax1dude.net/", comment: "lax1dude relay #2", primary: relayId == 1 },
+		{ addr: "wss://relay.shhnowisnottheti.me/", comment: "ayunami relay #1", primary: relayId == 2 }
+	]
+};
+
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+</script>
+<script type="text/javascript">
+"use strict";
+if(typeof window !== "undefined") window.eaglercraftXClientScriptElement = document.currentScript;
+${classes_js}
+</script>
+<script type="text/javascript">
+"use strict";
+(function(){
+	window.eaglercraftXOpts.assetsURI = ${assets_epk};
+
+	var launchInterval = -1;
+	var launchCounter = 1;
+	var launchCountdownNumberElement = null;
+	var launchCountdownProgressElement = null;
+	var launchSkipCountdown = false;
+
+	var launchTick = function() {
+		launchCountdownNumberElement.innerText = "" + Math.floor(6.0 - launchCounter * 0.06);
+		launchCountdownProgressElement.style.width = "" + launchCounter + "%";
+		if(++launchCounter > 100 || launchSkipCountdown) {
+			clearInterval(launchInterval);
+			setTimeout(function() { document.body.removeChild(document.getElementById("launch_countdown_screen")); document.body.style.backgroundColor = "black"; main(); }, 50);
+		}
+	};
+
+	window.addEventListener("load", function() {
+		launchCountdownNumberElement = document.getElementById("launchCountdownNumber");
+		launchCountdownProgressElement = document.getElementById("launchCountdownProgress");
+		launchInterval = setInterval(launchTick, 50);
+		document.getElementById("skipCountdown").addEventListener("click", function() {
+			launchSkipCountdown = true;
+		});
+		document.getElementById("bootMenu").addEventListener("click", function() {
+			launchSkipCountdown = true;
+			window.eaglercraftXOpts.showBootMenuOnLaunch = true;
+		});
+	});
+})();
+</script>
+<link type="image/png" rel="shortcut icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAGLUlEQVRYR72XW0iVWRTHl5VaamoXm1TCCLpQDzMPvU3RhcbAhyZ1oJmQHmqaijAmmCgqMqGJIhIhirKcZiDmTW2eRkLopUCiAguiHqIL3tPR46W85ny/dVp79neO2ttsOJzv27f13///WmuvL2EiaJHtrULLuJ2j//9nS+j9tmUiozxbbUbK2hREgEkSEhLk48ePMmPGDIeHd36M8bOx8fFxt4Z+GmPMZa+ZM2e68djDhQAYiLSaL3TR8PCwLpw9e7au4310dNQZnzNnjvbTBwh+s2bN0r7k5GQZGxvTPp6nYjkKoGihyJeJIRbYlB9GAaAGSvpCUvX396tBgHR3d+upExMT3alTUlKiewYSx7JsTPwHgJ4AhMnw4cMHGRwcVMOwkfjjSNwmvb29ygZGzdjbt29lZGRET71kyZKQcWmckMjf7SFfS/CdEAzpddmOzmPHjunmq1evlsLb+Q6AScVcGgb5HT16VObNm6cM7N+/X7KysmTkh57ouqZRidR2qXHfjxSA0QHl6AalAwMDMnfuXOczgVQSK5X8kaqbYbS1tVVyc3Pd/Bs3bsiePXucBDwk/pmpbMKOkwAAGGWjpKQkNcypoX/BggVuIg8+CJOK/q6uLunp6ZEVK1a4+ZFIRH2IfZCC/7S0NB0fGhpyjq0MWHjhVKDDsQDz6NEjWbt2rS7CCGPmiBO/p0hmZqaOAfrNmzfy5MkT2blzp7x69UqWLl2qRvktWrRI3r9/7/zEP5UDgAebBNDEM0hhAWejmUHbAMAomJ6erl2wMFkUACI1NVVgJSMjI8SqA2DJBKMwgCy2cV9fnwKKlYTQo3/x4sXKEJFAVOCQrGf+06dP9T8nJ0fa2tokOzvquCEfMAlASPixgNgHOWzglJYd1RcCRujHSek3JixhIRX9d+7cUWAdHR2yd+9e59TYYA6sKwOcAtTv3r2Turo69ebCwkLVFCPLli1TwMQ4m3FSWFq5cqX2o/nLly/l2bNnsm7dOt0cAFevXpVr165JTU2NbNiwwTEIYA7FHg4AToI+tbW1Ulxc7Ci6fPmyIj1w4ECYuoBqL4JDY7EvyIAE8+fP1yGYNWdXAOhFysVRoOzixYty7tw5ndzQ0KDRQJKxduLECdm0aZM0NjZKSUmJevxUrbq6WrZt26anNSfmsABAxlAiQlvA4MlMLi8vl7KysmlPd+rUKc14paWlk867fv26yolfESWw6UdCCAATcBA89ebNmy6TTYsgGOSUlvVi51ZWVmpuACTsLlwYXHxecwD87ARF9+7dk61bt37Oto6fPXtWjh8/rhKiL42saa351x6ViXEaciNJSAJLFro4kAJAfsxCHXF8//592bFjh3r37t27QwDr6+ulvb1dttd9E3dxcW8Y9eyNzNMCwAfu3r0rz58/V90OHjyoYQqApqYmOXnyZBw7pGO9nH5OigPgp+44BvzKhV0tbxPzZDkaGY5E9eLFC6V548aNcubMGQfk8OHDcvr0aens7JSsX1Libk6/3sQeh3KJyI4CNcPf/xN9DSgzh+QVumCAqxeakefChQty5MgRnf769WvJy8vTZ0Ak/zQWBRE0qwM4gIUfEujB/HpgstIJZ1y/fr0CALm1S5cuyaFDh/S1qqpKU601ADx8+FC+rvpKu/4qapBdu3YJdwqGrZZ0AKx6HSjuCJVd479Fa0GuUwDgnOhHe/z4seTn5+vz+fPnZd++fTrH7o6Wlha5deuWpvWCggJ3n5DG2VPpp7r264HB7zrjtOuuGFJnxAAScPfTyOdr1qzRZwxt2bJFLzAAUHhwLyAV9wxAkdPqxjgARh1M9BcFRaOnHXXfqlWrZPPmzXLlyhV3KwKAsFq+fLk8ePAglN0wZo4GGDMIGGPJbIZ8wDr9Gp5IQGNSLkZtY+ZWVFSo5xM1dl3bKRn3a0yks1rQKu04J/TvfOdRwQNOxSI/MVGMkFabm5tDxait8zMrVz0lHkCt3JuSAfsc8xET97YJ/4Si+QHOZCnWB23z2Qfarcqy+J9WAmOCxf73H88WiniwH05sGPv5NdW3pA90Uh/wnTKk16cPVitE7DvQjE/2kctcgE8l77QAfKSfe/aTmAL69KX9uXX/Aqn0T91DqBZ3AAAAAElFTkSuQmCC" />
+</head>
+<body style="margin:0px;width:100%;height:100%;overflow:hidden;background-color:white;" id="game_frame">
+<div style="margin:0px;width:100%;height:100%;font-family:sans-serif;display:flex;align-items:center;user-select:none;" id="launch_countdown_screen">
+<div style="margin:auto;text-align:center;">
+<h1>This file is from <span style="color:#AA0000;">${date}</span></h1>
+<h2>Game will launch in <span id="launchCountdownNumber">5</span>...</h2>
+<div style="border:2px solid black;width:100%;height:15px;padding:1px;margin-bottom:20vh;"><div id="launchCountdownProgress" style="background-color:#555555;width:0%;height:100%;"></div>
+<p style="margin-top:30px;"><button id="skipCountdown" autofocus>Skip Countdown</button>&emsp;<button id="bootMenu">Enter Boot Menu</button></p></div>
+</div>
+</div>
+</body>
+</html>
