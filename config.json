@@ -15,7 +15,7 @@
   ],
   "rightSideText": "A Minecraft client clone in the browser!",
   "defaultUsername": "mcrafter{0-9999}",
-  "splashText": "This funny was made by Jmax. RIP ASHTON you will be missed.",
+  "splashText": "This funny was made by Jameson. Ur welcom skids.",
   "splashTextFallback": "Welcome!",
   "pauseLinks": [
     [{"type": "github"}, {"type": "discord"}]
@@ -30,4 +30,5 @@
   ]
 
 }
+
 
