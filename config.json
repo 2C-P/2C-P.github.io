@@ -14,7 +14,7 @@
     {"ip": "kaboom.pw", "version": "1.20.3", "description": "Very nice a polite server. Must try for everyone!"}
   ],
   "rightSideText": "A Minecraft client clone in the browser!",
-  "defaultUsername": "mcrafter{0-9999}",
+  "defaultUsername": "sigma{0-9999}",
   "splashText": "This funny was made by Jameson. Ur welcom skids.",
   "splashTextFallback": "Welcome!",
   "pauseLinks": [
@@ -30,5 +30,6 @@
   ]
 
 }
+
 
 
